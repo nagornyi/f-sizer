@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">f-sizer</string>
+    <string name="action_info">Information</string>
+    <string name="size_spinner_caption">Size</string>
+    <string name="clothing_spinner_caption">Clothing</string>
+    <string name="button_send">Convert</string>
+    <string name="action_gender">Gender</string>
+
+    <!-- real ad units -->
+    <string name="main_screen_ad_id">ca-app-pub-5925166783691550/2758422482</string>
+
+    <!-- test ad units -->
+<!--        <string name="main_screen_ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
+
+    <string-array name="women_clothing">
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Dresses</item>
+        <item>Outerwear</item>
+        <item>Shoes</item>
+        <item>Bra</item>
+        <item>Panties</item>
+        <item>Pantyhose</item>
+        <item>Swimwear</item>
+    </string-array>
+
+    <string-array name="men_clothing">
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Suiting/Jackets</item>
+        <item>Suiting/Pants</item>
+        <item>Outerwear</item>
+        <item>Shoes</item>
+    </string-array>
+
+    <integer name="simpletooltip_overlay_alpha">120</integer>
+    <integer name="simpletooltip_animation_duration">800</integer>
+</resources>
