@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,8 +28,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,10 +83,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHandler db = new DatabaseHandler(this);
 
         setContentView(R.layout.activity_main);
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
+        MobileAds.initialize(this, initializationStatus -> {
         });
 
         mAdView = findViewById(R.id.adView);
@@ -103,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         if(db.getAllContacts().size() == 0) Data.InitializeSizes(this);
 
         mTitle = getTitle();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mLeftDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mLeftDrawerList = findViewById(R.id.left_drawer);
 
         //clothing type spinner
-        clothingTypeSpinner = (Spinner) findViewById(R.id.clothing_type_spinner);
+        clothingTypeSpinner = findViewById(R.id.clothing_type_spinner);
         // Create an ArrayAdapter using the string array and a default clothingTypeSpinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.women_clothing, android.R.layout.simple_spinner_item);
@@ -119,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
         clothingTypeSpinner.setOnItemSelectedListener(new ClothingSpinnerActivity());
 
         //size spinner
-        sizeSpinner = (Spinner) findViewById(R.id.size_spinner);
+        sizeSpinner = findViewById(R.id.size_spinner);
         sizes = getListOfSizes();
-        adapterSize = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sizes);
+        adapterSize = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sizes);
         adapterSize.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sizeSpinner.setAdapter(adapterSize);
         sizeSpinner.setOnItemSelectedListener(new SizeSpinnerActivity());
@@ -131,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the adapter for the list view
         regions = getListOfRegions();
-        adapterLeft = new ArrayAdapter<String>(this, R.layout.drawer_list_item, regions);
+        adapterLeft = new ArrayAdapter<>(this, R.layout.drawer_list_item, regions);
         mLeftDrawerList.setAdapter(adapterLeft);
         // Set the list's click listener
         mLeftDrawerList.setOnItemClickListener(new LeftDrawerItemClickListener());
 
-        mRightDrawerList = (ListView) findViewById(R.id.right_drawer);
+        mRightDrawerList = findViewById(R.id.right_drawer);
         mClothingTypeMen = getResources().getStringArray(R.array.men_clothing);
         mClothingTypeWomen = getResources().getStringArray(R.array.women_clothing);
 
@@ -153,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mDrawerLayout == null || mLeftDrawerView == null || mRightDrawerView == null) {
             // Configure navigation drawer
-            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            mDrawerLayout = findViewById(R.id.drawer_layout);
             mLeftDrawerView = findViewById(R.id.left_drawer);
             mRightDrawerView = findViewById(R.id.right_drawer);
         }
@@ -167,19 +161,13 @@ public class MainActivity extends AppCompatActivity {
             CLOTHING_TYPE = "Tops";
         }
 
-        sourceFlag = (ImageView) findViewById(R.id.sourceFlag);
-        targetFlag = (ImageView) findViewById(R.id.targetFlag);
-        convArrow = (ImageView) findViewById(R.id.arrow);
+        sourceFlag = findViewById(R.id.sourceFlag);
+        targetFlag = findViewById(R.id.targetFlag);
+        convArrow = findViewById(R.id.arrow);
 
-        View.OnClickListener l1 = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { mDrawerLayout.openDrawer(mLeftDrawerView); }
-        };
+        View.OnClickListener l1 = v -> mDrawerLayout.openDrawer(mLeftDrawerView);
         sourceFlag.setOnClickListener(l1);
-        View.OnClickListener l2 = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { mDrawerLayout.openDrawer(mRightDrawerView); }
-        };
+        View.OnClickListener l2 = v -> mDrawerLayout.openDrawer(mRightDrawerView);
         targetFlag.setOnClickListener(l2);
 
         EuropeNations = new ArrayList<String>();
@@ -209,24 +197,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_info:
-                displayInfo();
-                return true;
-            case R.id.womanGender:
-                changeClothingType(R.array.women_clothing);
-                DEPARTMENT = "Women";
-                updateDrawerItems();
-                genderSelector.setIcon(R.drawable.girl);
-                return true;
-            case R.id.manGender:
-                changeClothingType(R.array.men_clothing);
-                DEPARTMENT = "Men";
-                updateDrawerItems();
-                genderSelector.setIcon(R.drawable.boy);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_info) {
+            displayInfo();
+            return true;
+        } else if (itemId == R.id.womanGender) {
+            changeClothingType(R.array.women_clothing);
+            DEPARTMENT = "Women";
+            updateDrawerItems();
+            genderSelector.setIcon(R.drawable.girl);
+            return true;
+        } else if (itemId == R.id.manGender) {
+            changeClothingType(R.array.men_clothing);
+            DEPARTMENT = "Men";
+            updateDrawerItems();
+            genderSelector.setIcon(R.drawable.boy);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -257,10 +245,6 @@ public class MainActivity extends AppCompatActivity {
             highlightSize(true);
             return;
         }
-
-        //Intent intent = new Intent(this, DisplayMessageActivity.class);
-        //intent.putExtra(SIZE, CHOSEN_SIZE);
-        //startActivity(intent);
 
         DatabaseHandler db = new DatabaseHandler(this);
         // Reading all sizes
@@ -408,13 +392,13 @@ public class MainActivity extends AppCompatActivity {
         CHOSEN_SIZE = "[NOT SELECTED]";
         updateSizeItems();
         highlightSize(false);
-        int id = getResources().getIdentifier("question", "drawable", "com.anahorn.fukusizer");
+        int id = R.drawable.question;
         if(FROM_REGION.equals("[NOT SELECTED]")){
             YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag);
             sourceFlag.setImageResource(id);
         }
         YoYo.with(Techniques.FadeIn).duration(700).playOn(convArrow);
-        convArrow.setImageResource(getResources().getIdentifier("arrow", "drawable", "com.anahorn.fukusizer"));
+        convArrow.setImageResource(R.drawable.arrow);
         if(TO_REGION.equals("[NOT SELECTED]")) {
             YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag);
             targetFlag.setImageResource(id);
@@ -481,9 +465,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlightSize(Boolean status){
-        TextView textView = (TextView) findViewById(R.id.result);
+        TextView textView = findViewById(R.id.result);
         textView.setText("•••");
-        TextView size_label = (TextView) findViewById(R.id.size_label);
+        TextView size_label = findViewById(R.id.size_label);
         if (status) {
             size_label.setTextColor(Color.RED);
             YoYo.with(Techniques.ZoomIn).duration(700).playOn(size_label);
