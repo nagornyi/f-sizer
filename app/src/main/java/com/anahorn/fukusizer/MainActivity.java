@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(10);
 
-        if(db.getAllContacts().size() == 0) Data.InitializeSizes(this);
+        if(db.getAllClothingItems().isEmpty()) Data.InitializeSizes(this);
 
         mTitle = getTitle();
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -248,10 +248,10 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHandler db = new DatabaseHandler(this);
         // Reading all sizes
-        List<Contact> contacts = db.getAllContacts();
+        List<Clothing> clothings = db.getAllClothingItems();
 
         String resSize = "";
-        for (Contact cn : contacts) {
+        for (Clothing cn : clothings) {
             if(cn.getDept().equalsIgnoreCase(DEPARTMENT) &&
                     cn.getClothing().equalsIgnoreCase(CLOTHING_TYPE) &&
                     cn.getSizes().contains(FROM_REGION+":"+CHOSEN_SIZE+","))
@@ -259,7 +259,9 @@ public class MainActivity extends AppCompatActivity {
                 Pattern pattern = Pattern.compile(TO_REGION+":([^,]+)", Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(cn.getSizes());
                 while (matcher.find()) {
-                    if(!(resSize.length()==0)){resSize += " or ";}
+                    if(!(resSize.isEmpty())) {
+                        resSize += " or ";
+                    }
                     resSize += matcher.group(1);
                 }
             }
@@ -311,9 +313,9 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> getListOfRegions(){
         DatabaseHandler db = new DatabaseHandler(this);
-        List<Contact> contacts = db.getAllContacts();
+        List<Clothing> clothings = db.getAllClothingItems();
         List<String> regions = new ArrayList<String>();
-        for (Contact cn : contacts) {
+        for (Clothing cn : clothings) {
             if(cn.getDept().equals(DEPARTMENT) &&
                     cn.getClothing().equals(CLOTHING_TYPE))
             {
@@ -331,11 +333,11 @@ public class MainActivity extends AppCompatActivity {
     private List<String> getListOfSizes(){
         DatabaseHandler db = new DatabaseHandler(this);
         // Reading all sizes
-        List<Contact> contacts = db.getAllContacts();
+        List<Clothing> clothings = db.getAllClothingItems();
         List<String> sizes = new ArrayList<String>();
         sizes.add("•••");
         if(FROM_REGION.equalsIgnoreCase("[NOT SELECTED]")) return sizes;
-        for (Contact cn : contacts) {
+        for (Clothing cn : clothings) {
             if(cn.getDept().equals(DEPARTMENT) &&
                     cn.getClothing().equals(CLOTHING_TYPE))
             {

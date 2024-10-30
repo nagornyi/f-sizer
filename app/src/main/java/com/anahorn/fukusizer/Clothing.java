@@ -1,6 +1,6 @@
 package com.anahorn.fukusizer;
 
-public class Contact {
+public class Clothing {
 
     //private variables
     int _id;
@@ -9,11 +9,11 @@ public class Contact {
     String _size;
 
     // Empty constructor
-    public Contact(){
+    public Clothing(){
 
     }
     // constructor
-    public Contact(int id, String dept, String clothing, String size){
+    public Clothing(int id, String dept, String clothing, String size){
         this._id = id;
         this._dept = dept;
         this._clothing = clothing;
@@ -21,7 +21,7 @@ public class Contact {
     }
 
     // constructor
-    public Contact(String dept, String clothing, String size){
+    public Clothing(String dept, String clothing, String size){
         this._dept = dept;
         this._clothing = clothing;
         this._size = size;

@@ -7,12 +7,6 @@
     <string name="button_send">Convert</string>
     <string name="action_gender">Gender</string>
 
-    <!-- real ad units -->
-    <string name="main_screen_ad_id">ca-app-pub-5925166783691550/2758422482</string>
-
-    <!-- test ad units -->
-<!--        <string name="main_screen_ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
-
     <string-array name="women_clothing">
         <item>Tops</item>
         <item>Bottoms</item>

@@ -13,15 +13,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     // Database Name
     private static final String DATABASE_NAME = "Fukusizer";
 
-    // Contacts table name
-    private static final String TABLE_SIZES = "sizes";
+    // Clothings table name
+    private static final String TABLE_CLOTHINGS = "clothings";
 
-    // Contacts Table Columns names
+    // Clothings Table Columns names
     private static final String KEY_ID = "id";
     private static final String DEPT = "department";
     private static final String CLOTHING = "clothing";
@@ -34,11 +34,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating tables and populating data
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIZES);
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_SIZES + " ("
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLOTHINGS);
+        String CREATE_CLOTHINGS_TABLE = "CREATE TABLE " + TABLE_CLOTHINGS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY, " + DEPT + " TEXT, "
                 + CLOTHING + " TEXT, " + SIZE + " TEXT" + ");";
-        db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL(CREATE_CLOTHINGS_TABLE);
     }
 
     // Upgrading database
@@ -52,41 +52,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * All CRUD(Create, Read, Update, Delete) Operations
      */
 
-    // Adding new contact
-    void addContact(Contact contact) {
+    // Add new clothing
+    void addClothingItem(Clothing clothing) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DEPT, contact.getDept());
-        values.put(CLOTHING, contact.getClothing());
-        values.put(SIZE, contact.getSizes());
+        values.put(DEPT, clothing.getDept());
+        values.put(CLOTHING, clothing.getClothing());
+        values.put(SIZE, clothing.getSizes());
 
         // Inserting Row
-        db.insert(TABLE_SIZES, null, values);
+        db.insert(TABLE_CLOTHINGS, null, values);
         db.close(); // Closing database connection
     }
 
-    // Getting single contact
-    Contact getContact(int id) {
+    // Get single clothing item
+    Clothing getClothingItem(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SIZES, new String[] { KEY_ID,
+        Cursor cursor = db.query(TABLE_CLOTHINGS, new String[] { KEY_ID,
                         DEPT, CLOTHING, SIZE }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Contact contact = new Contact(Integer.parseInt(cursor.getString(0)),
+        Clothing clothing = new Clothing(Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1), cursor.getString(2), cursor.getString(3));
-        // return contact
-        return contact;
+
+        return clothing;
     }
 
-    // Getting All Contacts
-    public List<Contact> getAllContacts() {
-        List<Contact> contactList = new ArrayList<Contact>();
+    // Get all clothing items
+    public List<Clothing> getAllClothingItems() {
+        List<Clothing> clothingList = new ArrayList<Clothing>();
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_SIZES;
+        String selectQuery = "SELECT * FROM " + TABLE_CLOTHINGS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -94,45 +94,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Contact contact = new Contact();
-                contact.setID(Integer.parseInt(cursor.getString(0)));
-                contact.setDept(cursor.getString(1));
-                contact.setClothing(cursor.getString(2));
-                contact.setSize(cursor.getString(3));
-                // Adding contact to list
-                contactList.add(contact);
+                Clothing clothing = new Clothing();
+                clothing.setID(Integer.parseInt(cursor.getString(0)));
+                clothing.setDept(cursor.getString(1));
+                clothing.setClothing(cursor.getString(2));
+                clothing.setSize(cursor.getString(3));
+                // Adding clothing to list
+                clothingList.add(clothing);
             } while (cursor.moveToNext());
         }
 
-        // return contact list
-        return contactList;
+        return clothingList;
     }
 
-    // Updating single contact
-    public int updateContact(Contact contact) {
+    // Update single clothing item
+    public int updateClothingItem(Clothing clothing) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DEPT, contact.getDept());
-        values.put(CLOTHING, contact.getClothing());
-        values.put(SIZE, contact.getSizes());
+        values.put(DEPT, clothing.getDept());
+        values.put(CLOTHING, clothing.getClothing());
+        values.put(SIZE, clothing.getSizes());
 
         // updating row
-        return db.update(TABLE_SIZES, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(contact.getID()) });
+        return db.update(TABLE_CLOTHINGS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(clothing.getID()) });
     }
 
-    // Deleting single contact
-    public void deleteContact(Contact contact) {
+    // Delete single clothing item
+    public void deleteClothingItem(Clothing clothing) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SIZES, KEY_ID + " = ?",
-                new String[] { String.valueOf(contact.getID()) });
+        db.delete(TABLE_CLOTHINGS, KEY_ID + " = ?",
+                new String[] { String.valueOf(clothing.getID()) });
         db.close();
     }
 
-    // Getting contacts Count
-    public int getContactsCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_SIZES;
+    // Get the number of clothing items
+    public int getClothingsCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_CLOTHINGS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
