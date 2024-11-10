@@ -8,13 +8,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.content.SharedPreferences;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-
-    // All Static variables
-    // Database Version
-    public static final int DATABASE_VERSION = 11;
-
     // Database Name
     private static final String DATABASE_NAME = "Fukusizer";
 
@@ -28,7 +24,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SIZE = "size";
 
     public DatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null,
+                context.getResources().getInteger(R.integer.database_version));
+        System.out.println("Database version: "+context.getResources().getInteger(R.integer.database_version));
+        boolean forceRecreateDb = context.getResources().getBoolean(R.bool.force_recreate_db);
+        SharedPreferences prefs = context.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        boolean dbRecreated = prefs.getBoolean(MainActivity.KEY_DB_RECREATED, false);
+        if (forceRecreateDb && !dbRecreated) {
+            System.out.println("Force recreating database");
+            context.deleteDatabase(DATABASE_NAME);
+            // Set flag to indicate that the database has been recreated
+            prefs.edit().putBoolean(MainActivity.KEY_DB_RECREATED, true).apply();
+        }
     }
 
     // Creating tables and populating data

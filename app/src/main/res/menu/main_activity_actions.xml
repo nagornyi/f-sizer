@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_info"
+    <item
+        android:id="@+id/action_info"
         android:title="@string/action_info"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_gender"
+    <item
+        android:id="@+id/action_gender"
         android:title="@string/action_gender"
         app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/womanGender"
-                android:icon="@drawable/girl"
-                android:title="Women" />
+                android:title="Women"
+                android:actionLayout="@layout/custom_menu_item" />
             <item
                 android:id="@+id/manGender"
-                android:icon="@drawable/boy"
-                android:title="Men" />
+                android:title="Men"
+                android:actionLayout="@layout/custom_menu_item" />
         </menu>
     </item>
 </menu>
