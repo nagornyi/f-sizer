@@ -32,7 +32,6 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<String> regions;
     public static List<String> sizes;
 
+    ImageView clothingImage;
     ImageView sourceFlag;
     ImageView targetFlag;
     ImageView convArrow;
@@ -78,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<String> EuropeanCountries;
     public static List<String> AsianCountries;
-    public static Map<String, Integer> mapOfIcons;
+    public static Map<String, Integer> mapOfFlagIcons;
+    public static Map<String, Integer> mapOfWomenClothingIcons;
+    public static Map<String, Integer> mapOfMenClothingIcons;
 
     public static final String PREFS_NAME = "ApplicationPrefs";
     public static final String KEY_DB_RECREATED = "db_recreated";
@@ -100,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
         EuropeanCountries = Arrays.asList(context.getResources().getStringArray(R.array.european_countries));
         AsianCountries = Arrays.asList(context.getResources().getStringArray(R.array.asian_countries));
-        mapOfIcons = getMapOfIcons();
+        mapOfFlagIcons = IconHelpers.getMapOfFlagIcons();
+        mapOfWomenClothingIcons = IconHelpers.getMapOfWomenClothingIcons();
+        mapOfMenClothingIcons = IconHelpers.getMapOfMenClothingIcons();
 
         setContentView(R.layout.activity_main);
         MobileAds.initialize(this, initializationStatus -> {});
@@ -184,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         sourceFlag = findViewById(R.id.sourceFlag);
         targetFlag = findViewById(R.id.targetFlag);
         convArrow = findViewById(R.id.arrow);
+        clothingImage = findViewById(R.id.clothing_image);
 
         View.OnClickListener l1 = v -> mDrawerLayout.openDrawer(mLeftDrawerView);
         sourceFlag.setOnClickListener(l1);
@@ -224,14 +229,14 @@ public class MainActivity extends AppCompatActivity {
             displayAppInfo();
             return true;
         } else if (itemId == R.id.womanGender) {
-            changeClothingType(R.array.women_clothing);
+            updateClothingsForDepartment(R.array.women_clothing);
             DEPARTMENT = context.getResources().getString(R.string.department_women);
             prefs.edit().putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT).apply();
             genderSelector.setIcon(R.drawable.girl);
             updateDrawerItems();
             return true;
         } else if (itemId == R.id.manGender) {
-            changeClothingType(R.array.men_clothing);
+            updateClothingsForDepartment(R.array.men_clothing);
             DEPARTMENT = context.getResources().getString(R.string.department_men);
             prefs.edit().putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT).apply();
             genderSelector.setIcon(R.drawable.boy);
@@ -335,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void changeClothingType(int resId) {
+    public void updateClothingsForDepartment(int resId) {
         String CLOTHING_TYPE_MEM = CLOTHING_TYPE;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 resId, R.layout.spinner_item);
@@ -343,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
         clothingTypeSpinner.setAdapter(adapter);
         String[] new_clothes = getResources().getStringArray(resId);
         int new_pos = Arrays.asList(new_clothes).indexOf(CLOTHING_TYPE_MEM);
-        if(new_pos != -1) {
+        if (new_pos != -1) {
             clothingTypeSpinner.setSelection(new_pos);
             CLOTHING_TYPE = CLOTHING_TYPE_MEM;
         } else {
@@ -453,14 +458,14 @@ public class MainActivity extends AppCompatActivity {
             FROM_REGION = FROM_REGION_MEM;
             mLeftDrawerList.setItemChecked(new_from_reg_pos, true);
 
-            id = mapOfIcons.get(FROM_REGION);
+            id = mapOfFlagIcons.get(FROM_REGION);
             YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag);
             sourceFlag.setImageResource(id);
         }
         if (new_to_reg_pos != -1) {
             TO_REGION = TO_REGION_MEM;
             mRightDrawerList.setItemChecked(new_to_reg_pos, true);
-            id = mapOfIcons.get(TO_REGION);
+            id = mapOfFlagIcons.get(TO_REGION);
             YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag);
             targetFlag.setImageResource(id);
         }
@@ -485,25 +490,6 @@ public class MainActivity extends AppCompatActivity {
             YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag);
             targetFlag.setImageResource(id);
         }
-    }
-
-    private static Map<String, Integer> getMapOfIcons() {
-        Map<String, Integer> drawableMap = new HashMap<>();
-        drawableMap.put("Australia", R.drawable.australia);
-        drawableMap.put("Belgium", R.drawable.belgium);
-        drawableMap.put("China", R.drawable.china);
-        drawableMap.put("Europe", R.drawable.europe);
-        drawableMap.put("France", R.drawable.france);
-        drawableMap.put("Germany", R.drawable.germany);
-        drawableMap.put("India", R.drawable.india);
-        drawableMap.put("Italy", R.drawable.italy);
-        drawableMap.put("Japan", R.drawable.japan);
-        drawableMap.put("Korea", R.drawable.korea);
-        drawableMap.put("New Zealand", R.drawable.newzealand);
-        drawableMap.put("Spain", R.drawable.spain);
-        drawableMap.put("UK", R.drawable.uk);
-        drawableMap.put("USA", R.drawable.usa);
-        return drawableMap;
     }
 
     private void updateDrawerItems(){
@@ -532,9 +518,18 @@ public class MainActivity extends AppCompatActivity {
 
     private class ClothingSpinnerActivity extends Activity implements ListView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            if(DEPARTMENT.equals(context.getResources().getString(R.string.department_women))) CLOTHING_TYPE = mClothingTypeWomen[pos];
-            if(DEPARTMENT.equals(context.getResources().getString(R.string.department_men))) CLOTHING_TYPE = mClothingTypeMen[pos];
+            int image = R.drawable.fedora;
+            if(DEPARTMENT.equals(context.getResources().getString(R.string.department_women))) {
+                CLOTHING_TYPE = mClothingTypeWomen[pos];
+                image = mapOfWomenClothingIcons.get(CLOTHING_TYPE);
+            }
+            if(DEPARTMENT.equals(context.getResources().getString(R.string.department_men))) {
+                CLOTHING_TYPE = mClothingTypeMen[pos];
+                image = mapOfMenClothingIcons.get(CLOTHING_TYPE);
+            }
             updateDrawerItems();
+            YoYo.with(Techniques.FadeIn).duration(700).playOn(clothingImage);
+            clothingImage.setImageResource(image);
         }
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
@@ -556,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
         mLeftDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mLeftDrawerList);
         updateSizeItems();
-        int id = mapOfIcons.get(FROM_REGION);
+        int id = mapOfFlagIcons.get(FROM_REGION);
         YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag);
         sourceFlag.setImageResource(id);
     }
@@ -565,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
         TO_REGION = regions.get(position);
         mRightDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mRightDrawerList);
-        int id = mapOfIcons.get(TO_REGION);
+        int id = mapOfFlagIcons.get(TO_REGION);
         YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag);
         targetFlag.setImageResource(id);
     }
