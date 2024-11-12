@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:text="@string/clothing_spinner_caption"
             android:textColor="#36454f"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:id="@+id/clothing_label"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp" />
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:text="@string/size_spinner_caption"
             android:textColor="#36454f"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:id="@+id/size_label"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp" />
@@ -56,63 +56,71 @@
             android:textSize="24sp"
             android:textColor="#fffafa"
             android:background="#0093af"
-            android:onClick="convertSize"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/sourceFlag" />
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="10dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/arrow" />
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/targetFlag" />
+            <LinearLayout
+                android:id="@+id/flags_layout"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/sourceFlag"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal" />
 
-        <ImageView
-            android:id="@+id/clothing_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center_horizontal" />
+                <ImageView
+                    android:id="@+id/arrow"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <ImageView
+                    android:id="@+id/targetFlag"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/clothing_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/flags_layout"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal">
 
             <TextView
+                android:id="@+id/result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:textColor="#36454f"
                 android:text="•••"
                 android:singleLine="false"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:id="@+id/result" />
+                android:gravity="center" />
         </LinearLayout>
 
         <!-- content fixated to the bottom of the screen -->
@@ -142,7 +150,6 @@
         android:layout_gravity="left"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:layout_marginTop="10dp"
         android:dividerHeight="10dp" />
 
     <ListView android:id="@+id/right_drawer"
@@ -151,6 +158,5 @@
         android:layout_gravity="right"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:layout_marginTop="10dp"
         android:dividerHeight="10dp" />
 </androidx.drawerlayout.widget.DrawerLayout>

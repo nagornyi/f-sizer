@@ -16,8 +16,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView sourceFlag;
     ImageView targetFlag;
     ImageView convArrow;
+    Button convertButton;
 
     public MenuItem genderSelector;
     public MenuItem appInformation;
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         View backgroundimage = findViewById(R.id.main_page);
         Drawable background = backgroundimage.getBackground();
         background.setAlpha(10);
+        Animation buttonPressAnimation = AnimationUtils.loadAnimation(this, R.anim.button_press);
 
         if(db.getAllClothingItems().isEmpty()) Data.InitializeSizes(this);
 
@@ -194,6 +199,12 @@ public class MainActivity extends AppCompatActivity {
         sourceFlag.setOnClickListener(l1);
         View.OnClickListener l2 = v -> mDrawerLayout.openDrawer(mRightDrawerView);
         targetFlag.setOnClickListener(l2);
+
+        convertButton = findViewById(R.id.convert_button);
+        convertButton.setOnClickListener(v -> {
+            v.startAnimation(buttonPressAnimation);
+            convertSize(v);
+        });
     }
 
     @Override
