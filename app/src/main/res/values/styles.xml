@@ -1,0 +1,7 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#fffafa</item>
+        <item name="android:textColorPrimary">#0093af</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

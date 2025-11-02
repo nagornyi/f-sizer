@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.anahorn.fukusizer'
+    defaultConfig {
+        applicationId 'com.anahorn.fukusizer'
+        compileSdk 35
+        minSdkVersion 22
+        targetSdkVersion 34
+        versionCode 13
+        versionName "2.2"
+        resValue "integer", "database_version", "12"
+    }
+    buildTypes {
+        debug {
+            resValue "string", "main_screen_ad_id", "ca-app-pub-3940256099942544/6300978111" // Test ad ID
+            resValue "bool", "force_recreate_db", "true" // Force recreate the DB
+        }
+        release {
+            resValue "string", "main_screen_ad_id", "ca-app-pub-5925166783691550/2758422482" // Real ad ID
+            resValue "bool", "force_recreate_db", "false" // Only recreate the DB when there's new version
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.daimajia.easing:library:2.4@aar'
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
+    implementation 'com.google.android.gms:play-services-ads:23.5.0'
+    implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.2'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

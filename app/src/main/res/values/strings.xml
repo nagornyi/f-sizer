@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">F-Sizer</string>
+    <string name="app_about">F-Sizer is a handy app for Android that makes it super simple to convert any international clothing sizes in just a few clicks!\n\nWhile we do our best to make sure all our size conversion results are as accurate as possible, we cannot 100% guarantee that our conversions always show the exact size you need as sizes can sometimes vary between brands.\n\n<b>Version 2.2</b></string>
+    <string name="action_info">Information</string>
+    <string name="size_spinner_caption">Size of clothing</string>
+    <string name="clothing_spinner_caption">Type of clothing</string>
+    <string name="button_send">Convert</string>
+    <string name="action_gender">Gender</string>
+    <string name="department_women">Women</string>
+    <string name="department_men">Men</string>
+
+    <string-array name="women_clothing">
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Dresses</item>
+        <item>Outerwear</item>
+        <item>Shoes</item>
+        <item>Bra</item>
+        <item>Panties</item>
+        <item>Pantyhose</item>
+        <item>Swimwear</item>
+        <item>Hats</item>
+    </string-array>
+
+    <string-array name="men_clothing">
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Suiting/Jackets</item>
+        <item>Suiting/Pants</item>
+        <item>Outerwear</item>
+        <item>Shoes</item>
+        <item>Hats</item>
+    </string-array>
+
+    <string-array name="european_countries">
+        <item>France</item>
+        <item>Germany</item>
+        <item>Italy</item>
+        <item>Spain</item>
+        <item>Belgium</item>
+    </string-array>
+
+    <string-array name="asian_countries">
+        <item>Japan</item>
+        <item>Korea</item>
+        <item>China</item>
+    </string-array>
+</resources>
