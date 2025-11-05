@@ -51,6 +51,17 @@ captures/
 .idea/navEditor.xml
 .idea/deploymentTargetSelector.xml
 
+# Additional IDE files that should be ignored
+.idea/misc.xml
+.idea/compiler.xml
+.idea/markdown.xml
+.idea/copilot*.xml
+.idea/AndroidProjectSystem.xml
+.idea/inspectionProfiles/
+.idea/runConfigurations.xml
+.idea/other.xml
+.idea/migrations.xml
+
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
 #*.jks
