@@ -13,6 +13,8 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         context = applicationContext
 
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -77,6 +80,15 @@ class MainActivity : AppCompatActivity() {
         mapOfMenClothingIcons = IconHelpers.getMapOfMenClothingIcons()
 
         setContentView(R.layout.activity_main)
+
+        // Set system bars to use dark content (dark icons/text) for light background
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController?.isAppearanceLightStatusBars = true
+        windowInsetsController?.isAppearanceLightNavigationBars = true
+
+        mDrawerLayout = findViewById(R.id.drawer_layout)
+
         MobileAds.initialize(this) {}
 
         mAdView = findViewById(R.id.adView)
@@ -91,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         if (db.getAllClothingItems().isEmpty()) Data.initializeSizes(this)
 
         mTitle = title
-        mDrawerLayout = findViewById(R.id.drawer_layout)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         mLeftDrawerList = findViewById(R.id.left_drawer)
 

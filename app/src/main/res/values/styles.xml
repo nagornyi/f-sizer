@@ -3,5 +3,13 @@
         <item name="colorPrimary">#fffafa</item>
         <item name="android:textColorPrimary">#0093af</item>
         <item name="android:textSize">18sp</item>
+        <item name="actionBarStyle">@style/CustomActionBarStyle</item>
+    </style>
+
+    <style name="CustomActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="contentInsetStart">10dp</item>
+        <item name="contentInsetEnd">10dp</item>
+        <item name="contentInsetLeft">10dp</item>
+        <item name="contentInsetRight">10dp</item>
     </style>
 </resources>

@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.anahorn.fukusizer'
-    compileSdk 35
+    compileSdkVersion 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
@@ -11,13 +11,12 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '21'
     }
 
     defaultConfig {
         applicationId 'com.anahorn.fukusizer'
-        minSdkVersion 22
-        targetSdkVersion 34
+        minSdkVersion 23
+        targetSdkVersion 36
         versionCode 13
         versionName "2.2"
         resValue "integer", "database_version", "12"
@@ -31,7 +30,7 @@ android {
             resValue "string", "main_screen_ad_id", "ca-app-pub-5925166783691550/2758422482" // Real ad ID
             resValue "bool", "force_recreate_db", "false" // Only recreate the DB when there's new version
             minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     productFlavors {
@@ -41,11 +40,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'com.daimajia.easing:library:2.4@aar'
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
-    implementation 'com.google.android.gms:play-services-ads:23.5.0'
+    implementation 'com.google.android.gms:play-services-ads:24.7.0'
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.2'
 }
 
