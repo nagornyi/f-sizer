@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
@@ -234,14 +232,14 @@ class MainActivity : AppCompatActivity() {
 
         if (FROM_REGION == "[NOT SELECTED]" && TO_REGION == "[NOT SELECTED]") {
             checkCountries = false
-            YoYo.with(Techniques.ZoomIn).duration(700).playOn(sourceFlag)
-            YoYo.with(Techniques.ZoomIn).duration(700).playOn(targetFlag)
+            AnimationHelper.zoomIn(sourceFlag)
+            AnimationHelper.zoomIn(targetFlag)
         } else if (FROM_REGION == "[NOT SELECTED]") {
             checkCountries = false
-            YoYo.with(Techniques.ZoomIn).duration(700).playOn(sourceFlag)
+            AnimationHelper.zoomIn(sourceFlag)
         } else if (TO_REGION == "[NOT SELECTED]") {
             checkCountries = false
-            YoYo.with(Techniques.ZoomIn).duration(700).playOn(targetFlag)
+            AnimationHelper.zoomIn(targetFlag)
         }
 
         if (CHOSEN_SIZE == "[NOT SELECTED]" || CHOSEN_SIZE == "•••") {
@@ -270,7 +268,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         textView.text = resultMsg
-        YoYo.with(Techniques.Landing).duration(700).playOn(textView)
+        AnimationHelper.landing(textView)
     }
 
     private fun calculateSize(): String {
@@ -435,14 +433,14 @@ class MainActivity : AppCompatActivity() {
             mLeftDrawerList.setItemChecked(newFromRegPos, true)
 
             val id = mapOfFlagIcons[FROM_REGION] ?: R.drawable.question
-            YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag)
+            AnimationHelper.fadeIn(sourceFlag)
             sourceFlag.setImageResource(id)
         }
         if (newToRegPos != -1) {
             TO_REGION = regions[newToRegPos]
             mRightDrawerList.setItemChecked(newToRegPos, true)
             val id = mapOfFlagIcons[TO_REGION] ?: R.drawable.question
-            YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag)
+            AnimationHelper.fadeIn(targetFlag)
             targetFlag.setImageResource(id)
         }
 
@@ -453,17 +451,17 @@ class MainActivity : AppCompatActivity() {
         highlightSize(false)
 
         // display arrow icon
-        YoYo.with(Techniques.FadeIn).duration(700).playOn(convArrow)
+        AnimationHelper.fadeIn(convArrow)
         convArrow.setImageResource(R.drawable.arrow)
 
         // display a question mark icon when region is not selected
         val questionId = R.drawable.question
         if (FROM_REGION == "[NOT SELECTED]") {
-            YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag)
+            AnimationHelper.fadeIn(sourceFlag)
             sourceFlag.setImageResource(questionId)
         }
         if (TO_REGION == "[NOT SELECTED]") {
-            YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag)
+            AnimationHelper.fadeIn(targetFlag)
             targetFlag.setImageResource(questionId)
         }
     }
@@ -504,7 +502,7 @@ class MainActivity : AppCompatActivity() {
                 image = mapOfMenClothingIcons[CLOTHING_TYPE] ?: R.drawable.fedora
             }
             updateDrawerItems()
-            YoYo.with(Techniques.FadeIn).duration(700).playOn(clothingImage)
+            AnimationHelper.fadeIn(clothingImage)
             clothingImage.setImageResource(image)
         }
 
@@ -530,7 +528,7 @@ class MainActivity : AppCompatActivity() {
         mDrawerLayout.closeDrawer(mLeftDrawerList)
         updateSizeItems()
         val id = mapOfFlagIcons[FROM_REGION] ?: R.drawable.question
-        YoYo.with(Techniques.FadeIn).duration(700).playOn(sourceFlag)
+        AnimationHelper.fadeIn(sourceFlag)
         sourceFlag.setImageResource(id)
     }
 
@@ -539,7 +537,7 @@ class MainActivity : AppCompatActivity() {
         mRightDrawerList.setItemChecked(position, true)
         mDrawerLayout.closeDrawer(mRightDrawerList)
         val id = mapOfFlagIcons[TO_REGION] ?: R.drawable.question
-        YoYo.with(Techniques.FadeIn).duration(700).playOn(targetFlag)
+        AnimationHelper.fadeIn(targetFlag)
         targetFlag.setImageResource(id)
     }
 
@@ -549,7 +547,7 @@ class MainActivity : AppCompatActivity() {
         val sizeLabel = findViewById<TextView>(R.id.size_label)
         if (status) {
             sizeLabel.setTextColor("#ff4500".toColorInt())
-            YoYo.with(Techniques.ZoomIn).duration(700).playOn(sizeLabel)
+            AnimationHelper.zoomIn(sizeLabel)
         } else {
             sizeLabel.setTextColor(Color.BLACK)
         }
@@ -567,6 +565,7 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
     }
+
 
     companion object {
 
