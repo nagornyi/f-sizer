@@ -10,6 +10,7 @@
     <string name="department_women">Women</string>
     <string name="department_men">Men</string>
     <string name="result_placeholder">•••</string>
+    <string name="unselected_placeholder">[NOT SELECTED]</string>
 
     <string-array name="women_clothing">
         <item>Tops</item>

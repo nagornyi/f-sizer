@@ -4,7 +4,6 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 
 /**
@@ -13,13 +12,13 @@ import android.view.animation.ScaleAnimation
 object AnimationHelper {
 
     /**
-     * Creates a zoom-in animation with overshoot effect.
-     * The view scales from 50% to 100% size with a bounce.
+     * Creates a zoom-in animation.
+     * The view scales from 50% to 100% size.
      *
      * @param view The view to animate
-     * @param duration Animation duration in milliseconds (default: 700ms)
+     * @param duration Animation duration in milliseconds (default: 300ms)
      */
-    fun zoomIn(view: View, duration: Long = 700) {
+    fun zoomIn(view: View, duration: Long = 300) {
         val scaleAnimation = ScaleAnimation(
             0.5f, 1.0f,  // From 50% to 100% scale X
             0.5f, 1.0f,  // From 50% to 100% scale Y
@@ -27,7 +26,7 @@ object AnimationHelper {
             ScaleAnimation.RELATIVE_TO_SELF, 0.5f   // Pivot Y at center
         ).apply {
             this.duration = duration
-            interpolator = OvershootInterpolator()
+            interpolator = DecelerateInterpolator()
         }
         view.startAnimation(scaleAnimation)
     }
@@ -37,9 +36,9 @@ object AnimationHelper {
      * The view's alpha transitions from 0% to 100% opacity.
      *
      * @param view The view to animate
-     * @param duration Animation duration in milliseconds (default: 700ms)
+     * @param duration Animation duration in milliseconds (default: 300ms)
      */
-    fun fadeIn(view: View, duration: Long = 700) {
+    fun fadeIn(view: View, duration: Long = 300) {
         val fadeAnimation = AlphaAnimation(0.0f, 1.0f).apply {
             this.duration = duration
             interpolator = DecelerateInterpolator()
@@ -49,17 +48,17 @@ object AnimationHelper {
 
     /**
      * Creates a landing animation with combined fade-in and scale effects.
-     * The view fades in while scaling from 80% to 100% with an overshoot bounce.
+     * The view fades in while scaling from 80% to 100%.
      *
      * @param view The view to animate
-     * @param duration Animation duration in milliseconds (default: 700ms)
+     * @param duration Animation duration in milliseconds (default: 300ms)
      */
-    fun landing(view: View, duration: Long = 700) {
+    fun landing(view: View, duration: Long = 300) {
         val animationSet = AnimationSet(true).apply {
             // Fade in
             addAnimation(AlphaAnimation(0.0f, 1.0f))
 
-            // Scale with overshoot for landing effect
+            // Scale for landing effect
             addAnimation(ScaleAnimation(
                 0.8f, 1.0f,
                 0.8f, 1.0f,
@@ -68,7 +67,7 @@ object AnimationHelper {
             ))
 
             this.duration = duration
-            interpolator = OvershootInterpolator()
+            interpolator = DecelerateInterpolator()
         }
         view.startAnimation(animationSet)
     }
