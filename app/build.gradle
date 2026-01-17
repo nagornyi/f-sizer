@@ -17,8 +17,8 @@ android {
         applicationId 'com.anahorn.fukusizer'
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 13
-        versionName "2.2"
+        versionCode 14
+        versionName "2.3"
         resValue "integer", "database_version", "12"
     }
     buildTypes {
@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'com.daimajia.easing:library:2.4@aar'
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
-    implementation 'com.google.android.gms:play-services-ads:24.7.0'
+    implementation 'com.google.android.gms:play-services-ads:24.9.0'
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.2'
 }
 

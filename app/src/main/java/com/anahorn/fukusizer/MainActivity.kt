@@ -1,7 +1,6 @@
 package com.anahorn.fukusizer
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
@@ -14,7 +13,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -22,6 +20,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import java.util.regex.Pattern
+import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mClothingTypeMen: Array<String>
     private lateinit var mClothingTypeWomen: Array<String>
     private var mTitle: CharSequence? = null
-    private lateinit var mLeftDrawerView: View
-    private lateinit var mRightDrawerView: View
     private lateinit var adapterLeft: ArrayAdapter<String>
     private lateinit var adapterRight: ArrayAdapter<String>
     private lateinit var adapterSize: ArrayAdapter<String>
@@ -62,14 +60,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        context = applicationContext
 
-        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         // Get the department choice from preferences
         DEPARTMENT = prefs.getString(KEY_SELECTED_DEPARTMENT, resources.getString(R.string.department_women)) ?: resources.getString(R.string.department_women)
 
         // Reset the DB recreated flag on every app start (hot-reload included)
-        prefs.edit().putBoolean(KEY_DB_RECREATED, false).apply()
+        prefs.edit { putBoolean(KEY_DB_RECREATED, false) }
         // Initialize the DatabaseHandler instance only once
         db = DatabaseHandler(this)
 
@@ -84,8 +81,8 @@ class MainActivity : AppCompatActivity() {
         // Set system bars to use dark content (dark icons/text) for light background
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController?.isAppearanceLightStatusBars = true
-        windowInsetsController?.isAppearanceLightNavigationBars = true
+        windowInsetsController.isAppearanceLightStatusBars = true
+        windowInsetsController.isAppearanceLightNavigationBars = true
 
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -156,8 +153,6 @@ class MainActivity : AppCompatActivity() {
 
         // Configure navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout)
-        mLeftDrawerView = findViewById(R.id.left_drawer)
-        mRightDrawerView = findViewById(R.id.right_drawer)
 
         if (savedInstanceState == null) {
             SIZE = "[NOT SELECTED]"
@@ -173,13 +168,13 @@ class MainActivity : AppCompatActivity() {
         convArrow = findViewById(R.id.arrow)
         clothingImage = findViewById(R.id.clothing_image)
 
-        sourceFlag.setOnClickListener { mDrawerLayout.openDrawer(mLeftDrawerView) }
-        targetFlag.setOnClickListener { mDrawerLayout.openDrawer(mRightDrawerView) }
+        sourceFlag.setOnClickListener { mDrawerLayout.openDrawer(mLeftDrawerList) }
+        targetFlag.setOnClickListener { mDrawerLayout.openDrawer(mRightDrawerList) }
 
         convertButton = findViewById(R.id.convert_button)
         convertButton.setOnClickListener { v ->
             v.startAnimation(buttonPressAnimation)
-            convertSize(v)
+            convertSize()
         }
     }
 
@@ -195,7 +190,7 @@ class MainActivity : AppCompatActivity() {
         val manItem = menu.findItem(R.id.manGender)
         womanItem.setActionView(R.layout.custom_menu_item)
         manItem.setActionView(R.layout.custom_menu_item)
-        if (DEPARTMENT == context?.resources?.getString(R.string.department_women)) {
+        if (DEPARTMENT == resources.getString(R.string.department_women)) {
             womanItem.isChecked = true
             genderSelector.setIcon(R.drawable.girl)
         } else {
@@ -215,16 +210,16 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.womanGender -> {
                 updateClothingsForDepartment(R.array.women_clothing)
-                DEPARTMENT = context?.resources?.getString(R.string.department_women) ?: ""
-                prefs.edit().putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT).apply()
+                DEPARTMENT = resources.getString(R.string.department_women)
+                prefs.edit { putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT) }
                 genderSelector.setIcon(R.drawable.girl)
                 updateDrawerItems()
                 true
             }
             R.id.manGender -> {
                 updateClothingsForDepartment(R.array.men_clothing)
-                DEPARTMENT = context?.resources?.getString(R.string.department_men) ?: ""
-                prefs.edit().putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT).apply()
+                DEPARTMENT = resources.getString(R.string.department_men)
+                prefs.edit { putString(KEY_SELECTED_DEPARTMENT, DEPARTMENT) }
                 genderSelector.setIcon(R.drawable.boy)
                 updateDrawerItems()
                 true
@@ -233,7 +228,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun convertSize(view: View) {
+    fun convertSize() {
         var checkCountries = true
         var checkSize = true
 
@@ -270,7 +265,7 @@ class MainActivity : AppCompatActivity() {
             if (resSize.isEmpty()) {
                 "Size not found, sorry :("
             } else {
-                "Your $FROM_REGION size $CHOSEN_SIZE would be $resSize in $TO_REGION"
+                "Your size: $resSize"
             }
         }
 
@@ -500,11 +495,11 @@ class MainActivity : AppCompatActivity() {
     private inner class ClothingSpinnerActivity : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
             var image = R.drawable.fedora
-            if (DEPARTMENT == context?.resources?.getString(R.string.department_women)) {
+            if (DEPARTMENT == resources.getString(R.string.department_women)) {
                 CLOTHING_TYPE = mClothingTypeWomen[pos]
                 image = mapOfWomenClothingIcons[CLOTHING_TYPE] ?: R.drawable.fedora
             }
-            if (DEPARTMENT == context?.resources?.getString(R.string.department_men)) {
+            if (DEPARTMENT == resources.getString(R.string.department_men)) {
                 CLOTHING_TYPE = mClothingTypeMen[pos]
                 image = mapOfMenClothingIcons[CLOTHING_TYPE] ?: R.drawable.fedora
             }
@@ -553,7 +548,7 @@ class MainActivity : AppCompatActivity() {
         textView.text = "•••"
         val sizeLabel = findViewById<TextView>(R.id.size_label)
         if (status) {
-            sizeLabel.setTextColor(Color.parseColor("#ff4500"))
+            sizeLabel.setTextColor("#ff4500".toColorInt())
             YoYo.with(Techniques.ZoomIn).duration(700).playOn(sizeLabel)
         } else {
             sizeLabel.setTextColor(Color.BLACK)
@@ -574,7 +569,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private var context: Context? = null
 
         var SIZE = "[NOT SELECTED]"
         var CHOSEN_SIZE = "[NOT SELECTED]"

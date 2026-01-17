@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <!-- The main content view -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/main_page"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
@@ -107,7 +107,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal">
 
@@ -115,9 +115,9 @@
                 android:id="@+id/result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:textSize="28sp"
                 android:textColor="#36454f"
-                android:text="•••"
+                android:text="@string/result_placeholder"
                 android:singleLine="false"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="center_horizontal"
@@ -132,12 +132,9 @@
             android:orientation="vertical">
 
             <com.google.android.gms.ads.AdView
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/main_screen_ad_id">
@@ -148,7 +145,7 @@
     <ListView android:id="@+id/left_drawer"
         android:layout_width="140dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
@@ -157,7 +154,7 @@
     <ListView android:id="@+id/right_drawer"
         android:layout_width="140dp"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"

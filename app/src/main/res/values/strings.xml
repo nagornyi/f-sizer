@@ -9,6 +9,7 @@
     <string name="action_gender">Gender</string>
     <string name="department_women">Women</string>
     <string name="department_men">Men</string>
+    <string name="result_placeholder">•••</string>
 
     <string-array name="women_clothing">
         <item>Tops</item>
