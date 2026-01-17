@@ -16,6 +16,7 @@
     <string name="error_same_country">Please select a different country for the size conversion</string>
     <string name="error_size_not_found">Size not found, sorry :(</string>
     <string name="result_prefix">Your size:</string>
+    <string name="result_prefix_plural">Your range of sizes:</string>
     <string name="about_title">About</string>
     <string name="default_clothing_type">Tops</string>
     <string name="ok_button_label">OK</string>

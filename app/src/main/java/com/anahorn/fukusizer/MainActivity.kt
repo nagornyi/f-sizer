@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -166,8 +167,11 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             SIZE = getString(R.string.unselected_placeholder)
             CHOSEN_SIZE = getString(R.string.unselected_placeholder)
-            FROM_REGION = getString(R.string.default_source_country)
-            TO_REGION = getString(R.string.default_target_country)
+            // Load saved regions from preferences, or use defaults
+            FROM_REGION = prefs.getString(KEY_FROM_REGION, getString(R.string.default_source_country))
+                ?: getString(R.string.default_source_country)
+            TO_REGION = prefs.getString(KEY_TO_REGION, getString(R.string.default_target_country))
+                ?: getString(R.string.default_target_country)
             CLOTHING_TYPE = getString(R.string.default_clothing_type)
             if (DEPARTMENT == resources.getString(R.string.department_women)) CLOTHING_TYPE = mClothingTypeWomen[0]
             if (DEPARTMENT == resources.getString(R.string.department_men)) CLOTHING_TYPE = mClothingTypeMen[0]
@@ -273,19 +277,32 @@ class MainActivity : AppCompatActivity() {
                 val resSize = sizeConverter.calculateSize(
                     FROM_REGION, TO_REGION, CHOSEN_SIZE, DEPARTMENT, CLOTHING_TYPE
                 )
-                val resultMsg = if (resSize.isEmpty()) {
+                val resultMsg: CharSequence = if (resSize.isEmpty()) {
                     getString(R.string.error_size_not_found)
                 } else {
-                    "${getString(R.string.result_prefix)} $resSize"
+                    // Check if multiple sizes (contains newline from converted <br> tag)
+                    if (resSize.contains("\n")) {
+                        // Multiple sizes: use plural prefix with bullet points on separate lines
+                        TextUtils.concat(getString(R.string.result_prefix_plural), "\n• ", resSize)
+                    } else {
+                        // Single size: display on same line as prefix
+                        TextUtils.concat(getString(R.string.result_prefix), " ", resSize)
+                    }
                 }
                 showConversionResult(resultMsg)
             }
         }
     }
 
-    private fun showConversionResult(message: String) {
+    private fun showConversionResult(message: CharSequence) {
         val textView = findViewById<TextView>(R.id.result)
-        textView.text = message
+        // Use SPANNABLE buffer type to ensure custom spans are rendered
+        textView.setText(message, TextView.BufferType.SPANNABLE)
+        // Force TextView to redraw and measure properly
+        textView.post {
+            textView.invalidate()
+            textView.requestLayout()
+        }
         AnimationHelper.landing(textView)
     }
 
@@ -341,6 +358,8 @@ class MainActivity : AppCompatActivity() {
         // set new regions in both drawers (or keep the old ones if they exist in the new regions list)
         if (newFromRegPos != -1) {
             FROM_REGION = regions[newFromRegPos]
+            // Save the restored region to preferences
+            prefs.edit { putString(KEY_FROM_REGION, FROM_REGION) }
             mLeftDrawerList.setItemChecked(newFromRegPos, true)
 
             val id = mapOfFlagIcons[FROM_REGION] ?: R.drawable.question
@@ -348,6 +367,8 @@ class MainActivity : AppCompatActivity() {
         }
         if (newToRegPos != -1) {
             TO_REGION = regions[newToRegPos]
+            // Save the restored region to preferences
+            prefs.edit { putString(KEY_TO_REGION, TO_REGION) }
             mRightDrawerList.setItemChecked(newToRegPos, true)
             val id = mapOfFlagIcons[TO_REGION] ?: R.drawable.question
             AdapterUtils.updateImageWithAnimation(targetFlag, id)
@@ -413,6 +434,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectItemLeftPane(position: Int) {
         FROM_REGION = regions[position]
+        // Save the selected region to preferences
+        prefs.edit { putString(KEY_FROM_REGION, FROM_REGION) }
         mLeftDrawerList.setItemChecked(position, true)
         mDrawerLayout.closeDrawer(mLeftDrawerList)
         updateSizeItems()
@@ -422,6 +445,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectItemRightPane(position: Int) {
         TO_REGION = regions[position]
+        // Save the selected region to preferences
+        prefs.edit { putString(KEY_TO_REGION, TO_REGION) }
         mRightDrawerList.setItemChecked(position, true)
         mDrawerLayout.closeDrawer(mRightDrawerList)
         val id = mapOfFlagIcons[TO_REGION] ?: R.drawable.question
@@ -455,6 +480,8 @@ class MainActivity : AppCompatActivity() {
         const val PREFS_NAME = "ApplicationPrefs"
         const val KEY_DB_RECREATED = "db_recreated"
         const val KEY_SELECTED_DEPARTMENT = "selected_department"
+        const val KEY_FROM_REGION = "from_region"
+        const val KEY_TO_REGION = "to_region"
     }
 }
 
