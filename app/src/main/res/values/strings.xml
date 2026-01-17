@@ -11,6 +11,14 @@
     <string name="department_men">Men</string>
     <string name="result_placeholder">•••</string>
     <string name="unselected_placeholder">[NOT SELECTED]</string>
+    <string name="default_source_country">USA</string>
+    <string name="default_target_country">Germany</string>
+    <string name="error_same_country">Please select a different country for the size conversion</string>
+    <string name="error_size_not_found">Size not found, sorry :(</string>
+    <string name="result_prefix">Your size:</string>
+    <string name="about_title">About</string>
+    <string name="default_clothing_type">Tops</string>
+    <string name="ok_button_label">OK</string>
 
     <string-array name="women_clothing">
         <item>Tops</item>

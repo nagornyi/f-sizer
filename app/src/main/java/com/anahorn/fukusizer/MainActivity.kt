@@ -166,8 +166,9 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             SIZE = getString(R.string.unselected_placeholder)
             CHOSEN_SIZE = getString(R.string.unselected_placeholder)
-            FROM_REGION = "USA"
-            TO_REGION = "Germany"
+            FROM_REGION = getString(R.string.default_source_country)
+            TO_REGION = getString(R.string.default_target_country)
+            CLOTHING_TYPE = getString(R.string.default_clothing_type)
             if (DEPARTMENT == resources.getString(R.string.department_women)) CLOTHING_TYPE = mClothingTypeWomen[0]
             if (DEPARTMENT == resources.getString(R.string.department_men)) CLOTHING_TYPE = mClothingTypeMen[0]
         }
@@ -265,7 +266,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
             SizeConverter.ValidationResult.SAME_REGIONS -> {
-                showConversionResult("Please select a different country for the size conversion")
+                showConversionResult(getString(R.string.error_same_country))
                 return
             }
             SizeConverter.ValidationResult.VALID -> {
@@ -273,9 +274,9 @@ class MainActivity : AppCompatActivity() {
                     FROM_REGION, TO_REGION, CHOSEN_SIZE, DEPARTMENT, CLOTHING_TYPE
                 )
                 val resultMsg = if (resSize.isEmpty()) {
-                    "Size not found, sorry :("
+                    getString(R.string.error_size_not_found)
                 } else {
-                    "Your size: $resSize"
+                    "${getString(R.string.result_prefix)} $resSize"
                 }
                 showConversionResult(resultMsg)
             }
@@ -290,9 +291,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayAppInfo() {
         AlertDialog.Builder(this)
-            .setTitle("About")
+            .setTitle(getString(R.string.about_title))
             .setMessage(R.string.app_about)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setPositiveButton(getString(R.string.ok_button_label)) { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
@@ -446,9 +447,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var SIZE = ""
         var CHOSEN_SIZE = ""
-        var FROM_REGION = "USA"
-        var TO_REGION = "Germany"
-        var CLOTHING_TYPE = "Tops"
+        var FROM_REGION = ""
+        var TO_REGION = ""
+        var CLOTHING_TYPE = ""
         var DEPARTMENT: String = ""
 
         const val PREFS_NAME = "ApplicationPrefs"
